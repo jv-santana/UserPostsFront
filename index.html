@@ -3,82 +3,117 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documentação da API - João Victor</title>
+    <title>API Documentation - CRUD Users & Posts</title>
     <style>
-      :root {
-        --blue: #1d4ed8;
-        --blue-dark: #1e3a8a;
-        --light: #f1f5f9;
-        --dark: #0f172a;
-        --gray: #64748b;
-        --radius: 10px;
-        --transition: 0.3s ease;
-      }
-
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
 
+      :root {
+        --black: #000000;
+        --white: #ffffff;
+        --gray-50: #fafafa;
+        --gray-100: #f5f5f5;
+        --gray-200: #e5e5e5;
+        --gray-300: #d4d4d4;
+        --gray-400: #a3a3a3;
+        --gray-500: #737373;
+        --gray-600: #525252;
+        --gray-700: #404040;
+        --gray-800: #262626;
+        --gray-900: #171717;
+        --transition: all 0.2s ease;
+      }
+
       body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: var(--light);
-        color: var(--dark);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: var(--white);
+        color: var(--black);
+        line-height: 1.6;
+        font-size: 16px;
       }
 
       .container {
-        max-width: 960px;
-        margin: auto;
-        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
       }
 
-      header {
+      .header {
         text-align: center;
+        margin-bottom: 4rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        color: var(--gray-600);
+        font-weight: 400;
+      }
+
+      .config-section {
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 2rem;
         margin-bottom: 3rem;
       }
 
-      header h1 {
-        font-size: 2.5rem;
-        color: var(--blue);
-      }
-
-      header p {
-        color: var(--gray);
+      .config-section h2 {
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        color: var(--black);
       }
 
       .base-url {
-        background: var(--dark);
-        color: white;
-        padding: 1rem;
-        border-radius: var(--radius);
-        font-family: monospace;
-        text-align: center;
-        margin-bottom: 2rem;
+        background: var(--black);
+        color: var(--white);
+        padding: 1rem 1.5rem;
+        border-radius: 4px;
+        font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+        font-size: 1rem;
+        border: 1px solid var(--gray-800);
       }
 
       .tabs {
         display: flex;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        justify-content: center;
-        flex-wrap: wrap;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--gray-200);
       }
 
       .tab {
-        padding: 0.75rem 1.5rem;
+        flex: 1;
+        padding: 1rem 2rem;
         background: transparent;
-        border: 2px solid var(--blue);
-        border-radius: var(--radius);
-        color: var(--blue);
+        border: none;
+        color: var(--gray-600);
         cursor: pointer;
         transition: var(--transition);
+        font-size: 1rem;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
       }
 
-      .tab:hover,
+      .tab:hover {
+        color: var(--black);
+        background: var(--gray-50);
+      }
+
       .tab.active {
-        background: var(--blue);
-        color: white;
+        color: var(--black);
+        border-bottom-color: var(--black);
       }
 
       .endpoints-section {
@@ -89,132 +124,442 @@
         display: block;
       }
 
-      .card {
-        background: white;
-        border-radius: var(--radius);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        margin-bottom: 1.5rem;
+      .endpoint-card {
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        margin-bottom: 2rem;
         overflow: hidden;
+        transition: var(--transition);
       }
 
-      .card-header {
-        background: var(--light);
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e2e8f0;
+      .endpoint-card:hover {
+        border-color: var(--gray-300);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .endpoint-header {
+        padding: 1.5rem 2rem;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
+        gap: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        background: var(--gray-50);
       }
 
-      .badge {
-        padding: 0.4rem 0.8rem;
-        border-radius: 5px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        color: white;
-        min-width: 60px;
+      .method-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        color: var(--white);
+        font-weight: 600;
+        font-size: 0.75rem;
+        min-width: 70px;
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
-      .get { background: #0ea5e9; }
-      .post { background: #10b981; }
-      .put { background: #facc15; color: black; }
-      .delete { background: #ef4444; }
+      .method-get {
+        background: var(--gray-700);
+      }
 
-      .path {
-        font-family: monospace;
+      .method-post {
+        background: var(--black);
+      }
+
+      .method-put {
+        background: var(--gray-600);
+      }
+
+      .method-delete {
+        background: var(--gray-800);
+      }
+
+      .endpoint-path {
+        font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--black);
+      }
+
+      .endpoint-description {
+        color: var(--gray-600);
+        margin-left: auto;
+        font-style: italic;
+      }
+
+      .endpoint-body {
+        padding: 2rem;
+      }
+
+      .code-block {
+        background: var(--gray-900);
+        color: var(--gray-100);
+        padding: 1.5rem;
+        border-radius: 4px;
+        font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        overflow-x: auto;
+        margin: 1rem 0;
+        border: 1px solid var(--gray-800);
+      }
+
+      .section-title {
+        color: var(--black);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
         font-size: 1rem;
       }
 
-      .desc {
-        font-style: italic;
-        color: var(--gray);
-      }
-
-      .card-body {
-        padding: 1rem 1.5rem;
-      }
-
-      .section-label {
-        font-weight: bold;
-        margin-top: 1rem;
-      }
-
-      .code {
-        background: #1e293b;
-        color: #f8fafc;
-        padding: 1rem;
-        border-radius: 5px;
-        font-family: monospace;
-        font-size: 0.9rem;
-        overflow-x: auto;
-        margin-top: 0.5rem;
-      }
-
-      footer {
+      .footer {
         text-align: center;
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid #e2e8f0;
-        color: var(--gray);
+        padding: 3rem 0;
+        color: var(--gray-600);
+        border-top: 1px solid var(--gray-200);
+        margin-top: 4rem;
       }
 
-      .stack {
-        margin-top: 1rem;
+      .footer p {
+        margin-bottom: 0.5rem;
+      }
+
+      .tech-stack {
         display: flex;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 1rem;
+        margin-top: 1.5rem;
         flex-wrap: wrap;
       }
 
-      .tech {
-        padding: 0.4rem 1rem;
-        border-radius: 15px;
-        background: var(--light);
-        border: 1px solid var(--gray);
-        font-size: 0.85rem;
+      .tech-badge {
+        background: var(--white);
+        border: 1px solid var(--gray-300);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--gray-700);
+        transition: var(--transition);
+      }
+
+      .tech-badge:hover {
+        border-color: var(--black);
+        color: var(--black);
+      }
+
+      /* Scrollbar Styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--gray-100);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--gray-400);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--gray-600);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 2rem 1rem;
+        }
+
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .tabs {
+          flex-direction: column;
+        }
+
+        .tab {
+          border-bottom: none;
+          border-right: 2px solid transparent;
+          text-align: left;
+        }
+
+        .tab.active {
+          border-bottom: none;
+          border-right-color: var(--black);
+          background: var(--gray-50);
+        }
+
+        .endpoint-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+          padding: 1.5rem;
+        }
+
+        .endpoint-description {
+          margin-left: 0;
+        }
+
+        .endpoint-body {
+          padding: 1.5rem;
+        }
+
+        .tech-stack {
+          gap: 0.5rem;
+        }
+
+        .tech-badge {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .method-badge {
+          min-width: 60px;
+          padding: 0.4rem 0.8rem;
+          font-size: 0.7rem;
+        }
+
+        .endpoint-path {
+          font-size: 1rem;
+        }
+
+        .code-block {
+          font-size: 0.8rem;
+          padding: 1rem;
+        }
       }
     </style>
   </head>
+
   <body>
     <div class="container">
-      <header>
-        <h1>Documentação da API</h1>
-        <p>CRUD de Usuários e Posts | @JoaoVictor</p>
+      <header class="header">
+        <h1>API Documentation</h1>
+        <p>CRUD completo para Users & Posts</p>
+        <code>@Alana-Rocha</code>
       </header>
 
+      <section class="config-section">
+        <h2>Base URL</h2>
+        <div class="base-url">https://devweb2-prisma.vercel.app/</div>
+      </section>
 
-      <div class="tabs">
-        <button class="tab active" onclick="showTab('users')">Usuários</button>
+      <nav class="tabs">
+        <button class="tab active" onclick="showTab('users')">Users</button>
         <button class="tab" onclick="showTab('posts')">Posts</button>
-      </div>
+      </nav>
 
-      <section id="users" class="endpoints-section active">
-        <!-- Usuários -->
-      </section>
+      <main>
+        <!-- USERS ENDPOINTS -->
+        <section id="users" class="endpoints-section active">
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-get">GET</span>
+              <span class="endpoint-path">/user</span>
+              <span class="endpoint-description"
+                >Verifica se a rota está funcionando</span
+              >
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "message": "User route is working!" }
+              </div>
+            </div>
+          </div>
 
-      <section id="posts" class="endpoints-section">
-        <!-- Posts -->
-      </section>
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-post">POST</span>
+              <span class="endpoint-path">/user/create</span>
+              <span class="endpoint-description">Cria um novo usuário</span>
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Body (JSON):</div>
+              <div class="code-block">
+                { "name": "Alana Rocha", "email": "alana@email.com", "age": 25 }
+              </div>
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "id": "1", "name": "Alana Rocha", "email": "alana@email.com",
+                "age": 25, "createdAt": "2025-05-30T10:00:00Z" }
+              </div>
+            </div>
+          </div>
 
-      <footer>
-        <p>Desenvolvido por João Victor - API com Node.js & Prisma</p>
-        <div class="stack">
-          <span class="tech">Node.js</span>
-          <span class="tech">Express</span>
-          <span class="tech">TypeScript</span>
-          <span class="tech">Vercel</span>
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-get">GET</span>
+              <span class="endpoint-path">/user/list</span>
+              <span class="endpoint-description">Lista todos os usuários</span>
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                [ { "id": "1", "name": "Alana Rocha", "email":
+                "alana@email.com", "age": 25, "createdAt":
+                "2025-05-30T10:00:00Z" }, { "id": "2", "name": "Maria Santos",
+                "email": "maria@email.com", "age": 30, "createdAt":
+                "2025-05-30T11:00:00Z" } ]
+              </div>
+            </div>
+          </div>
+
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-put">PUT</span>
+              <span class="endpoint-path">/user/update/:id</span>
+              <span class="endpoint-description"
+                >Atualiza um usuário específico</span
+              >
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Parâmetro:</div>
+              <div class="code-block">:id - ID do usuário a ser atualizado</div>
+              <div class="section-title">Body (JSON):</div>
+              <div class="code-block">
+                { "name": "Alana Rocha", "email": "alana@email.com", "age": 26 }
+              </div>
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "id": "1", "name": "Alana Rocha", "email": "alana@email.com",
+                "age": 26, "updatedAt": "2025-05-30T12:00:00Z" }
+              </div>
+            </div>
+          </div>
+
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-delete">DELETE</span>
+              <span class="endpoint-path">/user/delete/:id</span>
+              <span class="endpoint-description"
+                >Remove um usuário específico</span
+              >
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Parâmetro:</div>
+              <div class="code-block">:id - ID do usuário a ser removido</div>
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "message": "User deleted successfully", "id": "1" }
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- POSTS ENDPOINTS -->
+        <section id="posts" class="endpoints-section">
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-post">POST</span>
+              <span class="endpoint-path">/post/create</span>
+              <span class="endpoint-description">Cria um novo post</span>
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Body (JSON):</div>
+              <div class="code-block">
+                { "title": "Meu Primeiro Post", "content": "Este é o conteúdo do
+                meu primeiro post", "userId": "1" }
+              </div>
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "id": "1", "title": "Meu Primeiro Post", "content": "Este é o
+                conteúdo do meu primeiro post", "userId": "1", "createdAt":
+                "2025-05-30T10:00:00Z" }
+              </div>
+            </div>
+          </div>
+
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-get">GET</span>
+              <span class="endpoint-path">/post/list</span>
+              <span class="endpoint-description">Lista todos os posts</span>
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                [ { "id": "1", "title": "Meu Primeiro Post", "content": "Este é
+                o conteúdo do meu primeiro post", "userId": "1", "createdAt":
+                "2025-05-30T10:00:00Z" }, { "id": "2", "title": "Segundo Post",
+                "content": "Mais conteúdo interessante", "userId": "2",
+                "createdAt": "2025-05-30T11:00:00Z" } ]
+              </div>
+            </div>
+          </div>
+
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-put">PUT</span>
+              <span class="endpoint-path">/post/update/:id</span>
+              <span class="endpoint-description"
+                >Atualiza um post específico</span
+              >
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Parâmetro:</div>
+              <div class="code-block">:id - ID do post a ser atualizado</div>
+              <div class="section-title">Body (JSON):</div>
+              <div class="code-block">
+                { "title": "Post Atualizado", "content": "Conteúdo modificado do
+                post", "userId": "1" }
+              </div>
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "id": "1", "title": "Post Atualizado", "content": "Conteúdo
+                modificado do post", "userId": "1", "updatedAt":
+                "2025-05-30T12:00:00Z" }
+              </div>
+            </div>
+          </div>
+
+          <div class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-delete">DELETE</span>
+              <span class="endpoint-path">/post/delete/:id</span>
+              <span class="endpoint-description"
+                >Remove um post específico</span
+              >
+            </div>
+            <div class="endpoint-body">
+              <div class="section-title">Parâmetro:</div>
+              <div class="code-block">:id - ID do post a ser removido</div>
+              <div class="section-title">Resposta:</div>
+              <div class="code-block">
+                { "message": "Post deleted successfully", "id": "1" }
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>API CRUD - Users & Posts</p>
+        <div class="tech-stack">
+          <span class="tech-badge">Node.js</span>
+          <span class="tech-badge">Express</span>
+          <span class="tech-badge">TypeScript</span>
+          <span class="tech-badge">Vercel</span>
         </div>
       </footer>
     </div>
 
     <script>
       function showTab(tabName) {
-        document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.endpoints-section').forEach(sec => sec.classList.remove('active'));
-        event.target.classList.add('active');
-        document.getElementById(tabName).classList.add('active');
+        document
+          .querySelectorAll(".tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".endpoints-section")
+          .forEach((section) => section.classList.remove("active"));
+
+        event.target.classList.add("active");
+        document.getElementById(tabName).classList.add("active");
       }
     </script>
   </body>
