@@ -4,7 +4,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'Users Posts',
   description: 'A simple app to view users posts',
-  generator: 'Alana Rocha',
+  generator: 'Joao Victor',
 }
 
 export default function RootLayout({
