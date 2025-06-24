@@ -51,12 +51,12 @@ export default function ApiDocumentation() {
       const data = await response.json()
       if (data.status === 200) {
         setUsers(data.users)
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to fetch users", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao buscar usuários", variant: "destructive" })
     }
     setLoading(false)
   }
@@ -68,19 +68,19 @@ export default function ApiDocumentation() {
       const data = await response.json()
       if (data.status === 200) {
         setPosts(data.posts)
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to fetch posts", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao buscar posts", variant: "destructive" })
     }
     setLoading(false)
   }
 
   const createUser = async () => {
     if (!userName || !userEmail) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
+      toast({ title: "Erro", description: "Preencha todos os campos", variant: "destructive" })
       return
     }
 
@@ -94,22 +94,22 @@ export default function ApiDocumentation() {
       const data = await response.json()
 
       if (data.status === 201) {
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
         setUserName("")
         setUserEmail("")
         fetchUsers()
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to create user", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao criar usuário", variant: "destructive" })
     }
     setLoading(false)
   }
 
   const updateUser = async (id: number) => {
     if (!userName || !userEmail) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
+      toast({ title: "Erro", description: "Preencha todos os campos", variant: "destructive" })
       return
     }
 
@@ -123,16 +123,16 @@ export default function ApiDocumentation() {
       const data = await response.json()
 
       if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
         setUserName("")
         setUserEmail("")
         setEditingUserId(null)
         fetchUsers()
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to update user", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao atualizar usuário", variant: "destructive" })
     }
     setLoading(false)
   }
@@ -146,20 +146,20 @@ export default function ApiDocumentation() {
       const data = await response.json()
 
       if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
         fetchUsers()
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to delete user", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao deletar usuário", variant: "destructive" })
     }
     setLoading(false)
   }
 
   const createPost = async () => {
     if (!postTitle || !postContent || !postAuthorId) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
+      toast({ title: "Erro", description: "Preencha todos os campos", variant: "destructive" })
       return
     }
 
@@ -177,23 +177,23 @@ export default function ApiDocumentation() {
       const data = await response.json()
 
       if (data.status === 201) {
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
         setPostTitle("")
         setPostContent("")
         setPostAuthorId("")
         fetchPosts()
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to create post", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao criar post", variant: "destructive" })
     }
     setLoading(false)
   }
 
   const updatePost = async (id: number) => {
     if (!postTitle || !postContent) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
+      toast({ title: "Erro", description: "Preencha todos os campos", variant: "destructive" })
       return
     }
 
@@ -207,16 +207,16 @@ export default function ApiDocumentation() {
       const data = await response.json()
 
       if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
         setPostTitle("")
         setPostContent("")
         setEditingPostId(null)
         fetchPosts()
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to update post", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao atualizar post", variant: "destructive" })
     }
     setLoading(false)
   }
@@ -230,13 +230,13 @@ export default function ApiDocumentation() {
       const data = await response.json()
 
       if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
+        toast({ title: "Sucesso", description: data.message })
         fetchPosts()
       } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+        toast({ title: "Erro", description: data.message, variant: "destructive" })
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to delete post", variant: "destructive" })
+      toast({ title: "Erro", description: "Falha ao deletar post", variant: "destructive" })
     }
     setLoading(false)
   }
@@ -264,26 +264,26 @@ export default function ApiDocumentation() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-light mb-2 tracking-tight">API Documentation</h1>
-          <p className="text-xl text-gray-600 mb-2">CRUD completo para Users & Posts</p>
-          <code className="text-sm bg-black text-white px-3 py-1 rounded">@Alana-Rocha</code>
+    <div className="min-h-screen bg-slate-50">
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-semibold mb-3 text-slate-800">Sistema de Gerenciamento</h1>
+          <p className="text-lg text-slate-600 mb-3">API para usuários e posts</p>
+          <code className="text-sm bg-slate-800 text-slate-200 px-3 py-1 rounded">Desenvolvido por João</code>
         </div>
 
-        <Card className="mb-8">
+        <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Base URL</CardTitle>
+            <CardTitle className="text-slate-700">URL Base da API</CardTitle>
           </CardHeader>
           <CardContent>
-            <code className="bg-black text-white p-4 rounded block font-mono">http://localhost:3000/api</code>
+            <code className="bg-slate-900 text-slate-100 p-3 rounded block font-mono">http://localhost:3000/api</code>
           </CardContent>
         </Card>
 
         <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="users">Usuários</TabsTrigger>
             <TabsTrigger value="posts">Posts</TabsTrigger>
           </TabsList>
 
@@ -347,11 +347,11 @@ export default function ApiDocumentation() {
                 <CardContent>
                   <div className="space-y-3">
                     {users.map((user) => (
-                      <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
                         <div>
-                          <p className="font-medium">{user.name}</p>
-                          <p className="text-sm text-gray-600">{user.email}</p>
-                          <p className="text-xs text-gray-500">ID: {user.id}</p>
+                          <p className="font-medium text-slate-800">{user.name}</p>
+                          <p className="text-sm text-slate-600">{user.email}</p>
+                          <p className="text-xs text-slate-500">ID: {user.id}</p>
                         </div>
                         <div className="flex gap-2">
                           <Button size="sm" variant="outline" onClick={() => editUser(user)}>
@@ -370,18 +370,18 @@ export default function ApiDocumentation() {
 
             {/* API Endpoints Documentation */}
             <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">Endpoints - Users</h3>
+              <h3 className="text-xl font-semibold text-slate-800">Endpoints - Usuários</h3>
 
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="secondary">GET</Badge>
-                  <code className="font-mono">/api/user</code>
-                  <span className="text-sm text-gray-600 ml-auto">Verifica se a rota está funcionando</span>
+                  <code className="font-mono text-sm">/api/user</code>
+                  <span className="text-sm text-slate-600 ml-auto">Verifica se a rota está funcionando</span>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     <p className="font-medium">Resposta:</p>
-                    <pre className="bg-gray-900 text-gray-100 p-3 rounded text-sm overflow-x-auto">
+                    <pre className="bg-slate-900 text-slate-100 p-3 rounded text-sm overflow-x-auto">
                       {`{ "message": "User route is working!" }`}
                     </pre>
                   </div>
@@ -391,14 +391,14 @@ export default function ApiDocumentation() {
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge>POST</Badge>
-                  <code className="font-mono">/api/user/create</code>
-                  <span className="text-sm text-gray-600 ml-auto">Cria um novo usuário</span>
+                  <code className="font-mono text-sm">/api/user/create</code>
+                  <span className="text-sm text-slate-600 ml-auto">Cria um novo usuário</span>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     <p className="font-medium">Body (JSON):</p>
-                    <pre className="bg-gray-900 text-gray-100 p-3 rounded text-sm overflow-x-auto">
-                      {`{ "name": "Alana Rocha", "email": "alana@email.com" }`}
+                    <pre className="bg-slate-900 text-slate-100 p-3 rounded text-sm overflow-x-auto">
+                      {`{ "name": "João Silva", "email": "joao@email.com" }`}
                     </pre>
                   </div>
                 </CardContent>
@@ -407,24 +407,24 @@ export default function ApiDocumentation() {
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="secondary">GET</Badge>
-                  <code className="font-mono">/api/user/list</code>
-                  <span className="text-sm text-gray-600 ml-auto">Lista todos os usuários</span>
+                  <code className="font-mono text-sm">/api/user/list</code>
+                  <span className="text-sm text-slate-600 ml-auto">Lista todos os usuários</span>
                 </CardHeader>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="outline">PUT</Badge>
-                  <code className="font-mono">/api/user/update/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Atualiza um usuário específico</span>
+                  <code className="font-mono text-sm">/api/user/update/:id</code>
+                  <span className="text-sm text-slate-600 ml-auto">Atualiza um usuário específico</span>
                 </CardHeader>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="destructive">DELETE</Badge>
-                  <code className="font-mono">/api/user/delete/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Remove um usuário específico</span>
+                  <code className="font-mono text-sm">/api/user/delete/:id</code>
+                  <span className="text-sm text-slate-600 ml-auto">Remove um usuário específico</span>
                 </CardHeader>
               </Card>
             </div>
@@ -502,12 +502,12 @@ export default function ApiDocumentation() {
                 <CardContent>
                   <div className="space-y-4">
                     {posts.map((post) => (
-                      <div key={post.id} className="border rounded-lg p-4">
+                      <div key={post.id} className="border rounded-lg p-4 bg-white">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1">
-                            <h4 className="font-medium text-lg">{post.title}</h4>
-                            <p className="text-gray-600 mt-1">{post.content}</p>
-                            <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                            <h4 className="font-medium text-lg text-slate-800">{post.title}</h4>
+                            <p className="text-slate-600 mt-1">{post.content}</p>
+                            <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
                               <span>ID: {post.id}</span>
                               <span>Autor ID: {post.authorId}</span>
                               {post.author && (
@@ -535,19 +535,19 @@ export default function ApiDocumentation() {
 
             {/* API Endpoints Documentation */}
             <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">Endpoints - Posts</h3>
+              <h3 className="text-xl font-semibold text-slate-800">Endpoints - Posts</h3>
 
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge>POST</Badge>
-                  <code className="font-mono">/api/post/create</code>
-                  <span className="text-sm text-gray-600 ml-auto">Cria um novo post</span>
+                  <code className="font-mono text-sm">/api/post/create</code>
+                  <span className="text-sm text-slate-600 ml-auto">Cria um novo post</span>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     <p className="font-medium">Body (JSON):</p>
-                    <pre className="bg-gray-900 text-gray-100 p-3 rounded text-sm overflow-x-auto">
-                      {`{ "title": "Meu Primeiro Post", "content": "Este é o conteúdo do meu primeiro post", "authorId": 1 }`}
+                    <pre className="bg-slate-900 text-slate-100 p-3 rounded text-sm overflow-x-auto">
+                      {`{ "title": "Meu Post", "content": "Conteúdo do post", "authorId": 1 }`}
                     </pre>
                   </div>
                 </CardContent>
@@ -556,32 +556,32 @@ export default function ApiDocumentation() {
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="secondary">GET</Badge>
-                  <code className="font-mono">/api/post/list</code>
-                  <span className="text-sm text-gray-600 ml-auto">Lista todos os posts</span>
+                  <code className="font-mono text-sm">/api/post/list</code>
+                  <span className="text-sm text-slate-600 ml-auto">Lista todos os posts</span>
                 </CardHeader>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="outline">PUT</Badge>
-                  <code className="font-mono">/api/post/update/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Atualiza um post específico</span>
+                  <code className="font-mono text-sm">/api/post/update/:id</code>
+                  <span className="text-sm text-slate-600 ml-auto">Atualiza um post específico</span>
                 </CardHeader>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center gap-4 pb-3">
                   <Badge variant="destructive">DELETE</Badge>
-                  <code className="font-mono">/api/post/delete/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Remove um post específico</span>
+                  <code className="font-mono text-sm">/api/post/delete/:id</code>
+                  <span className="text-sm text-slate-600 ml-auto">Remove um post específico</span>
                 </CardHeader>
               </Card>
             </div>
           </TabsContent>
         </Tabs>
 
-        <div className="text-center mt-12 pt-8 border-t">
-          <p className="text-gray-600 mb-4">API CRUD - Users & Posts</p>
+        <div className="text-center mt-12 pt-8 border-t border-slate-200">
+          <p className="text-slate-600 mb-4">Sistema CRUD - Usuários & Posts</p>
           <div className="flex justify-center gap-3 flex-wrap">
             <Badge variant="outline">Next.js</Badge>
             <Badge variant="outline">TypeScript</Badge>
