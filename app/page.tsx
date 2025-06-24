@@ -1,595 +1,221 @@
-"use client"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/hooks/use-toast"
-
-interface User {
-  id: number
-  name: string
-  email: string
-}
-
-interface Post {
-  id: number
-  title: string
-  content: string
-  authorId: number
-  author?: {
-    name: string
-    email: string
-  }
-}
-
-export default function ApiDocumentation() {
-  const [users, setUsers] = useState<User[]>([])
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(false)
-
-  // User form states
-  const [userName, setUserName] = useState("")
-  const [userEmail, setUserEmail] = useState("")
-  const [editingUserId, setEditingUserId] = useState<number | null>(null)
-
-  // Post form states
-  const [postTitle, setPostTitle] = useState("")
-  const [postContent, setPostContent] = useState("")
-  const [postAuthorId, setPostAuthorId] = useState("")
-  const [editingPostId, setEditingPostId] = useState<number | null>(null)
-
-  // API Functions
-  const fetchUsers = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch("/api/user/list")
-      const data = await response.json()
-      if (data.status === 200) {
-        setUsers(data.users)
-        toast({ title: "Success", description: data.message })
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação da API - João Victor</title>
+    <style>
+      :root {
+        --blue: #1d4ed8;
+        --blue-dark: #1e3a8a;
+        --light: #f1f5f9;
+        --dark: #0f172a;
+        --gray: #64748b;
+        --radius: 10px;
+        --transition: 0.3s ease;
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to fetch users", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const fetchPosts = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch("/api/post/list")
-      const data = await response.json()
-      if (data.status === 200) {
-        setPosts(data.posts)
-        toast({ title: "Success", description: data.message })
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to fetch posts", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const createUser = async () => {
-    if (!userName || !userEmail) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
-      return
-    }
-
-    setLoading(true)
-    try {
-      const response = await fetch("/api/user/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: userName, email: userEmail }),
-      })
-      const data = await response.json()
-
-      if (data.status === 201) {
-        toast({ title: "Success", description: data.message })
-        setUserName("")
-        setUserEmail("")
-        fetchUsers()
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light);
+        color: var(--dark);
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to create user", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const updateUser = async (id: number) => {
-    if (!userName || !userEmail) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
-      return
-    }
-
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/user/update/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: userName, email: userEmail }),
-      })
-      const data = await response.json()
-
-      if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
-        setUserName("")
-        setUserEmail("")
-        setEditingUserId(null)
-        fetchUsers()
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      .container {
+        max-width: 960px;
+        margin: auto;
+        padding: 2rem;
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to update user", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const deleteUser = async (id: number) => {
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/user/delete/${id}`, {
-        method: "DELETE",
-      })
-      const data = await response.json()
-
-      if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
-        fetchUsers()
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      header {
+        text-align: center;
+        margin-bottom: 3rem;
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to delete user", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const createPost = async () => {
-    if (!postTitle || !postContent || !postAuthorId) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
-      return
-    }
-
-    setLoading(true)
-    try {
-      const response = await fetch("/api/post/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: postTitle,
-          content: postContent,
-          authorId: Number.parseInt(postAuthorId),
-        }),
-      })
-      const data = await response.json()
-
-      if (data.status === 201) {
-        toast({ title: "Success", description: data.message })
-        setPostTitle("")
-        setPostContent("")
-        setPostAuthorId("")
-        fetchPosts()
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      header h1 {
+        font-size: 2.5rem;
+        color: var(--blue);
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to create post", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const updatePost = async (id: number) => {
-    if (!postTitle || !postContent) {
-      toast({ title: "Error", description: "Please fill all fields", variant: "destructive" })
-      return
-    }
-
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/post/update/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: postTitle, content: postContent }),
-      })
-      const data = await response.json()
-
-      if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
-        setPostTitle("")
-        setPostContent("")
-        setEditingPostId(null)
-        fetchPosts()
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      header p {
+        color: var(--gray);
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to update post", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const deletePost = async (id: number) => {
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/post/delete/${id}`, {
-        method: "DELETE",
-      })
-      const data = await response.json()
-
-      if (data.status === 200) {
-        toast({ title: "Success", description: data.message })
-        fetchPosts()
-      } else {
-        toast({ title: "Error", description: data.message, variant: "destructive" })
+      .base-url {
+        background: var(--dark);
+        color: white;
+        padding: 1rem;
+        border-radius: var(--radius);
+        font-family: monospace;
+        text-align: center;
+        margin-bottom: 2rem;
       }
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to delete post", variant: "destructive" })
-    }
-    setLoading(false)
-  }
 
-  const editUser = (user: User) => {
-    setUserName(user.name)
-    setUserEmail(user.email)
-    setEditingUserId(user.id)
-  }
+      .tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-  const editPost = (post: Post) => {
-    setPostTitle(post.title)
-    setPostContent(post.content || "")
-    setEditingPostId(post.id)
-  }
+      .tab {
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        border: 2px solid var(--blue);
+        border-radius: var(--radius);
+        color: var(--blue);
+        cursor: pointer;
+        transition: var(--transition);
+      }
 
-  const cancelEdit = () => {
-    setUserName("")
-    setUserEmail("")
-    setEditingUserId(null)
-    setPostTitle("")
-    setPostContent("")
-    setPostAuthorId("")
-    setEditingPostId(null)
-  }
+      .tab:hover,
+      .tab.active {
+        background: var(--blue);
+        color: white;
+      }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-light mb-2 tracking-tight">API Documentation</h1>
-          <p className="text-xl text-gray-600 mb-2">CRUD completo para Users & Posts</p>
-          <code className="text-sm bg-black text-white px-3 py-1 rounded">@Alana-Rocha</code>
-        </div>
+      .endpoints-section {
+        display: none;
+      }
 
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Base URL</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <code className="bg-black text-white p-4 rounded block font-mono">http://localhost:3000/api</code>
-          </CardContent>
-        </Card>
+      .endpoints-section.active {
+        display: block;
+      }
 
-        <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="posts">Posts</TabsTrigger>
-          </TabsList>
+      .card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+      }
 
-          <TabsContent value="users" className="space-y-6">
-            {/* User Management */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Gerenciar Usuários</CardTitle>
-                <CardDescription>Criar, listar, editar e excluir usuários</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="userName">Nome</Label>
-                    <Input
-                      id="userName"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                      placeholder="Digite o nome"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="userEmail">Email</Label>
-                    <Input
-                      id="userEmail"
-                      type="email"
-                      value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
-                      placeholder="Digite o email"
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  {editingUserId ? (
-                    <>
-                      <Button onClick={() => updateUser(editingUserId)} disabled={loading}>
-                        Atualizar Usuário
-                      </Button>
-                      <Button variant="outline" onClick={cancelEdit}>
-                        Cancelar
-                      </Button>
-                    </>
-                  ) : (
-                    <Button onClick={createUser} disabled={loading}>
-                      Criar Usuário
-                    </Button>
-                  )}
-                  <Button variant="outline" onClick={fetchUsers} disabled={loading}>
-                    Listar Usuários
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+      .card-header {
+        background: var(--light);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
 
-            {/* Users List */}
-            {users.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Usuários ({users.length})</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {users.map((user) => (
-                      <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div>
-                          <p className="font-medium">{user.name}</p>
-                          <p className="text-sm text-gray-600">{user.email}</p>
-                          <p className="text-xs text-gray-500">ID: {user.id}</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => editUser(user)}>
-                            Editar
-                          </Button>
-                          <Button size="sm" variant="destructive" onClick={() => deleteUser(user.id)}>
-                            Excluir
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+      .badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: white;
+        min-width: 60px;
+        text-align: center;
+      }
 
-            {/* API Endpoints Documentation */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">Endpoints - Users</h3>
+      .get { background: #0ea5e9; }
+      .post { background: #10b981; }
+      .put { background: #facc15; color: black; }
+      .delete { background: #ef4444; }
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="secondary">GET</Badge>
-                  <code className="font-mono">/api/user</code>
-                  <span className="text-sm text-gray-600 ml-auto">Verifica se a rota está funcionando</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <p className="font-medium">Resposta:</p>
-                    <pre className="bg-gray-900 text-gray-100 p-3 rounded text-sm overflow-x-auto">
-                      {`{ "message": "User route is working!" }`}
-                    </pre>
-                  </div>
-                </CardContent>
-              </Card>
+      .path {
+        font-family: monospace;
+        font-size: 1rem;
+      }
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge>POST</Badge>
-                  <code className="font-mono">/api/user/create</code>
-                  <span className="text-sm text-gray-600 ml-auto">Cria um novo usuário</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <p className="font-medium">Body (JSON):</p>
-                    <pre className="bg-gray-900 text-gray-100 p-3 rounded text-sm overflow-x-auto">
-                      {`{ "name": "Alana Rocha", "email": "alana@email.com" }`}
-                    </pre>
-                  </div>
-                </CardContent>
-              </Card>
+      .desc {
+        font-style: italic;
+        color: var(--gray);
+      }
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="secondary">GET</Badge>
-                  <code className="font-mono">/api/user/list</code>
-                  <span className="text-sm text-gray-600 ml-auto">Lista todos os usuários</span>
-                </CardHeader>
-              </Card>
+      .card-body {
+        padding: 1rem 1.5rem;
+      }
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="outline">PUT</Badge>
-                  <code className="font-mono">/api/user/update/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Atualiza um usuário específico</span>
-                </CardHeader>
-              </Card>
+      .section-label {
+        font-weight: bold;
+        margin-top: 1rem;
+      }
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="destructive">DELETE</Badge>
-                  <code className="font-mono">/api/user/delete/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Remove um usuário específico</span>
-                </CardHeader>
-              </Card>
-            </div>
-          </TabsContent>
+      .code {
+        background: #1e293b;
+        color: #f8fafc;
+        padding: 1rem;
+        border-radius: 5px;
+        font-family: monospace;
+        font-size: 0.9rem;
+        overflow-x: auto;
+        margin-top: 0.5rem;
+      }
 
-          <TabsContent value="posts" className="space-y-6">
-            {/* Post Management */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Gerenciar Posts</CardTitle>
-                <CardDescription>Criar, listar, editar e excluir posts</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="postTitle">Título</Label>
-                    <Input
-                      id="postTitle"
-                      value={postTitle}
-                      onChange={(e) => setPostTitle(e.target.value)}
-                      placeholder="Digite o título"
-                    />
-                  </div>
-                  {!editingPostId && (
-                    <div>
-                      <Label htmlFor="postAuthorId">ID do Autor</Label>
-                      <Input
-                        id="postAuthorId"
-                        type="number"
-                        value={postAuthorId}
-                        onChange={(e) => setPostAuthorId(e.target.value)}
-                        placeholder="ID do usuário autor"
-                      />
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="postContent">Conteúdo</Label>
-                  <Textarea
-                    id="postContent"
-                    value={postContent}
-                    onChange={(e) => setPostContent(e.target.value)}
-                    placeholder="Digite o conteúdo do post"
-                    rows={4}
-                  />
-                </div>
-                <div className="flex gap-2">
-                  {editingPostId ? (
-                    <>
-                      <Button onClick={() => updatePost(editingPostId)} disabled={loading}>
-                        Atualizar Post
-                      </Button>
-                      <Button variant="outline" onClick={cancelEdit}>
-                        Cancelar
-                      </Button>
-                    </>
-                  ) : (
-                    <Button onClick={createPost} disabled={loading}>
-                      Criar Post
-                    </Button>
-                  )}
-                  <Button variant="outline" onClick={fetchPosts} disabled={loading}>
-                    Listar Posts
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+      footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e2e8f0;
+        color: var(--gray);
+      }
 
-            {/* Posts List */}
-            {posts.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Posts ({posts.length})</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {posts.map((post) => (
-                      <div key={post.id} className="border rounded-lg p-4">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex-1">
-                            <h4 className="font-medium text-lg">{post.title}</h4>
-                            <p className="text-gray-600 mt-1">{post.content}</p>
-                            <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                              <span>ID: {post.id}</span>
-                              <span>Autor ID: {post.authorId}</span>
-                              {post.author && (
-                                <span>
-                                  Autor: {post.author.name} ({post.author.email})
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex gap-2 ml-4">
-                            <Button size="sm" variant="outline" onClick={() => editPost(post)}>
-                              Editar
-                            </Button>
-                            <Button size="sm" variant="destructive" onClick={() => deletePost(post.id)}>
-                              Excluir
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+      .stack {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
 
-            {/* API Endpoints Documentation */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">Endpoints - Posts</h3>
+      .tech {
+        padding: 0.4rem 1rem;
+        border-radius: 15px;
+        background: var(--light);
+        border: 1px solid var(--gray);
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Documentação da API</h1>
+        <p>CRUD de Usuários e Posts | @JoaoVictor</p>
+      </header>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge>POST</Badge>
-                  <code className="font-mono">/api/post/create</code>
-                  <span className="text-sm text-gray-600 ml-auto">Cria um novo post</span>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <p className="font-medium">Body (JSON):</p>
-                    <pre className="bg-gray-900 text-gray-100 p-3 rounded text-sm overflow-x-auto">
-                      {`{ "title": "Meu Primeiro Post", "content": "Este é o conteúdo do meu primeiro post", "authorId": 1 }`}
-                    </pre>
-                  </div>
-                </CardContent>
-              </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="secondary">GET</Badge>
-                  <code className="font-mono">/api/post/list</code>
-                  <span className="text-sm text-gray-600 ml-auto">Lista todos os posts</span>
-                </CardHeader>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="outline">PUT</Badge>
-                  <code className="font-mono">/api/post/update/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Atualiza um post específico</span>
-                </CardHeader>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4 pb-3">
-                  <Badge variant="destructive">DELETE</Badge>
-                  <code className="font-mono">/api/post/delete/:id</code>
-                  <span className="text-sm text-gray-600 ml-auto">Remove um post específico</span>
-                </CardHeader>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <div className="text-center mt-12 pt-8 border-t">
-          <p className="text-gray-600 mb-4">API CRUD - Users & Posts</p>
-          <div className="flex justify-center gap-3 flex-wrap">
-            <Badge variant="outline">Next.js</Badge>
-            <Badge variant="outline">TypeScript</Badge>
-            <Badge variant="outline">Prisma</Badge>
-            <Badge variant="outline">SQLite</Badge>
-          </div>
-        </div>
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('users')">Usuários</button>
+        <button class="tab" onclick="showTab('posts')">Posts</button>
       </div>
+
+      <section id="users" class="endpoints-section active">
+        <!-- Usuários -->
+      </section>
+
+      <section id="posts" class="endpoints-section">
+        <!-- Posts -->
+      </section>
+
+      <footer>
+        <p>Desenvolvido por João Victor - API com Node.js & Prisma</p>
+        <div class="stack">
+          <span class="tech">Node.js</span>
+          <span class="tech">Express</span>
+          <span class="tech">TypeScript</span>
+          <span class="tech">Vercel</span>
+        </div>
+      </footer>
     </div>
-  )
-}
+
+    <script>
+      function showTab(tabName) {
+        document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.endpoints-section').forEach(sec => sec.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+      }
+    </script>
+  </body>
+</html>
